@@ -13,7 +13,12 @@ trait TabsTrait
         $fields = $tabs[$tabTitle];
 
         foreach ($fields as $field) {
-            $count += count($errors->get($field->name()));
+            $name = $field->name();
+            if (method_exists($field, 'isTranslatable') && $field->isTranslatable() === true) {
+                $name .= '.*';
+            }
+
+            $count += count($errors->get($name));
         }
 
         return $count;
